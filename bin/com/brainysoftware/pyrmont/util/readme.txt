@@ -1,4 +1,0 @@
-Socket，http
-一个客户端和服务器端交互的简单示例
-服务器端MyServer
-客户端MyClient
