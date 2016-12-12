@@ -60,7 +60,6 @@ HttpProcessor processor = createProcessor();[4]
 processor.assign(socket);[5]
 ```
 
-## HttpProcessor
 [3]newProcessor()
 
 //newProcessor()方法实例化的同时，也启动处理器线程（阻塞状态）
@@ -109,7 +108,7 @@ private HttpProcessor createProcessor() {
 	}
 }
 ```
-
+## HttpProcessor
 [6]
 ```java	
 // HttpProcessor创建后，处理器线程就启动，启动后处于阻塞状态，
