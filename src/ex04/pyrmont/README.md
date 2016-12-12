@@ -123,7 +123,7 @@ public void run() {
             continue;
         // 具体处理来自于socket的请求
         try {
-            process(socket);
+            process(socket);[8]
         } catch (Throwable t) {
             log("process.invoke", t);
         }
@@ -176,55 +176,50 @@ synchronized void assign(Socket socket) {
         log(" An incoming request is being assigned");
 }
     
+ ```       
+[8]HttpProcessor processor方法
+```java
+// 在处理器线程中被自身调用，
+// 首先不断读取输入流
+while (!stopped && ok && keepAlive) {
+    request.setStream(input);
+    request.setResponse(response);
+    output = socket.getOutputStream();
+    response.setStream(output);
+    response.setRequest(request);
+    ((HttpServletResponse) response.getResponse()).setHeader("Server", SERVER_INFO);
+	
+	// 解析连接
+    parseConnection(socket);[9]
+    
+    // 解析请求
+    parseRequest(input, output);[10]
+    
+    // 解析请求头
+    parseHeaders(input);[11]
+   
+    // 将请求分发给具体的container处理
+    if (ok) {
+    	connector.getContainer().invoke(request, response);
+    }   
+            
+    // 将响应返回给客户端
+	response.finishResponse();
+	request.finishRequest();
+	output.flush();
+	
+    // 回收request和response对象
+    request.recycle();
+    response.recycle();
+}
+
+// 关闭socket
+shutdownInput(input);
+socket.close();
+socket = null;
  ```   
-
-
-
     
-
-    
- 5. HttpProcessor processor方法
- 	// 在处理器线程中被自身调用，
- 	// 首先不断读取输入流
- 	while (!stopped && ok && keepAlive) {
-        request.setStream(input);
-        request.setResponse(response);
-        output = socket.getOutputStream();
-        response.setStream(output);
-        response.setRequest(request);
-        ((HttpServletResponse) response.getResponse()).setHeader("Server", SERVER_INFO);
-		
-		// 解析连接
-        parseConnection(socket);
-        
-        // 解析请求
-        parseRequest(input, output);
-        
-        // 解析请求头
-        parseHeaders(input);
-       
-        // 将请求分发给具体的container处理
-        if (ok) {
-        	connector.getContainer().invoke(request, response);
-        }   
-                
-        // 将响应返回给客户端
-		response.finishResponse();
-		request.finishRequest();
-		output.flush();
-		
-        // 回收request和response对象
-        request.recycle();
-        response.recycle();
-    }
-
-	// 关闭socket
-    shutdownInput(input);
-    socket.close();
-    socket = null;
-    
-    
-6.HttpProcessor parseConnection()
+[9]HttpProcessor parseConnection()
     
     // request获取地址
 	((HttpRequestImpl) request).setInet(socket.getInetAddress());
@@ -238,8 +233,15 @@ synchronized void assign(Socket socket) {
     // request获取socket
     request.setSocket(socket);
     
-7.HttpProcessor  parseRequest() 
+[10]HttpProcessor  parseRequest() 
 	解析请求行（Http请求第一行：方法 URI 协议）
 
-8.HttpProcessor parseHeaders()
+[11]HttpProcessor parseHeaders()
 	解析请求头(Http请求第二行)
+	
+## 访问示例
+静态资源：http://localhost:8080/index.html
+
+servlet：http://localhost:8080/servlet/PrimitiveServlet
+
+servlet：http://localhost:8080/servlet/ModernServlet
