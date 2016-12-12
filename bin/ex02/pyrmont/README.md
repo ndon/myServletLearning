@@ -48,3 +48,7 @@ try {
 	System.out.println(e.toString());
 }
 ```
+
+## 访问
+静态资源：http://localhost:8080/index.html
+servlet：http://localhost:8080/servlet/PrimitiveServlet
