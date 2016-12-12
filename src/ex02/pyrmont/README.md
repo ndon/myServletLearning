@@ -49,7 +49,7 @@ try {
 }
 ```
 
-## 访问
+## 访问示例
 静态资源：http://localhost:8080/index.html
 
 servlet：http://localhost:8080/servlet/PrimitiveServlet

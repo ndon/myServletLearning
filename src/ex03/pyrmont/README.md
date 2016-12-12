@@ -35,3 +35,10 @@ Tomcat使用了Facade模式，将比较底层、低级的Request包装成为Serv
 而关于连接池、线程池等直接和socket打交道的事情，
 
 tomcat交给了org.apache.tomcat.util.net包的类去完成。
+
+## 访问示例
+静态资源：http://localhost:8080/index.html
+
+servlet：http://localhost:8080/servlet/PrimitiveServlet
+
+servlet：http://localhost:8080/servlet/ModernServlet
