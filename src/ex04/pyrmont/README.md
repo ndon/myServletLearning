@@ -156,6 +156,7 @@ private synchronized Socket await() {
 ```
 
 HttpProcessor assign方法
+
 [5]processor.assign(socket)
 ```java
 synchronized void assign(Socket socket) {
